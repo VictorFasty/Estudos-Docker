@@ -1,4 +1,4 @@
-# 🐳 Docker: O Guia Essencial para Desenvolvedores (Do Conceito à Prática) 
+# **🐳** Docker: O Guia Essencial para Desenvolvedores (Do Conceito à Prática)
 
 O Docker revolucionou a forma como desenvolvemos e entregamos software. Ele resolve um dos maiores pesadelos da nossa área: o famoso *"na minha máquina funciona"*.
 
@@ -90,6 +90,56 @@ EXPOSE 8080
 
 # Comando para iniciar a aplicação
 CMD ["java", "-jar", "/app/app.jar"]
+```
+
+### ## Organização dos Arquivos no Projeto
+
+```docker
+meu-projeto/
+│
+├── src/
+├── pom.xml
+├── Dockerfile
+├── docker-compose.yml
+└── .dockerignore
+```
+
+🐳Dockerfile
+
+Fica dentro da raiz da aplicação.
+
+Ele é responsável por:
+
+- Definir como a imagem será construída
+- Instalar dependências
+- Copiar código
+- Gerar o artefato (.jar, por exemplo)
+- Definir o comando inicial do container
+
+Ele constrói **UMA imagem para UMA aplicação**.
+
+Exemplo de uso:
+
+```
+docker build -t minha-api:1.0 .
+```
+
+## 🧩 docker-compose.yml
+
+Também fica na raiz do projeto.
+
+Ele é usado quando temos **múltiplos containers**.
+
+Exemplo clássico:
+
+- API Spring Boot
+- PostgreSQL
+- RabbitMQ
+
+Ao invés de rodar 3 comandos `docker run`, usamos um único:
+
+```
+docker-compose up
 ```
 
 ### Gerando e Rodando a Imagem
