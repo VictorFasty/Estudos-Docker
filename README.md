@@ -92,6 +92,54 @@ EXPOSE 8080
 CMD ["java", "-jar", "/app/app.jar"]
 ```
 
+## 🧩 6.1. O Arquivo docker-compose.yml
+
+Enquanto o `Dockerfile` define a "receita" para construir **uma única imagem**, o `docker-compose.yml` (que também deve ficar na raiz do projeto) é o maestro responsável por orquestrar **múltiplos containers** que precisam trabalhar em conjunto.
+
+Imagine que o seu projeto de portfólio — como a aplicação de gerenciamento de livros que você está desenvolvendo — não é apenas código Java. Ele precisa de um banco de dados **PostgreSQL** e, talvez, um serviço de cache ou mensageria. Em vez de subir cada um manualmente, o Compose une todos em um único ecossistema.
+
+### Estrutura Prática (Exemplo Full-Stack)
+
+Aqui está como o arquivo organiza os serviços para que eles se comuniquem automaticamente:
+
+```docker
+services:
+  db: # Configurações do Banco de Dados
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: library_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5437:5432" # Mapeia a porta 5437 do PC para a 5432 do Docker (evita conflitos locais)
+
+  app: # Configurações da nossa Aplicação Spring Boot
+    build: . # Indica que o Dockerfile está na mesma pasta
+    container_name: library-api
+    ports:
+      - "8080:8080"
+    environment: # Variáveis de conexão com o banco e OAuth2 do Google
+      - DATASOURCE_URL=jdbc:postgresql://db:5432/library_db
+      - DATASOURCE_USERNAME=postgres
+      - DATASOURCE_PASSWORD=postgres
+      - GOOGLE_CLIENT_ID=${GOOGLE_ID} # Valor lido do arquivo .env por segurança
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_SECRET}
+      - SPRING_PROFILES_ACTIVE=production
+    depends_on:
+      - db # Garante que a API só suba após o banco estar pronto
+```
+
+OBS: antes disso o DockerFile ja tem que estar configurado.
+
+logo apos a configuracao de ambos so rodar o 
+
+```docker
+docker-compose up --build -d
+```
+
+para compilar o Docker-compose
+
 ### ## Organização dos Arquivos no Projeto
 
 ```docker
@@ -223,3 +271,25 @@ Aqui está um resumo rápido para o seu dia a dia:
 1. Login: `docker login`
 2. Tag (se necessário): `docker tag imagem-local usuario/imagem:versao`
 3. Enviar: `docker push usuario/imagem:versao`
+
+**🐳** Docker e como ele acaba com o minha maquina roda.
+
+Sabemos que no desenvolvimento temos que otimizar nosso tempo para cumprir prazos e bater metas, nada melhor que o Docker
+
+Quem nunca passou pela situação de codar o dia todo, tudo rodar perfeito localmente e, na hora de subir para produção, tudo quebrar?
+
+A containerização com Docker resolve esse problema atraves de imagens e containers, atraves de DockerFiles, é um requisito essencial para qualquer desenvolvedor Backend hoje em dia. Pensando nisso, desenvolvi um guia definitivo com base em meu conhecimento — do conceito à orquestração — para desmistificar essa ferramenta, e fazer voce conseguir utilizar com facilidade e entender como o Docker funciona.
+
+📄 **Neste material você vai encontrar:**
+✅ A diferença real entre VM e Container (Kernel).
+✅ Como criar Dockerfiles otimizados (Multi-stage build).
+✅ Networking e Persistência de dados com Volumes.
+✅ O poder do Docker Compose para microsserviços.
+
+Preparei esse conteúdo pensando em quem está desenvolvendo API’s **Java/Spring** (como eu) ou qualquer outra stack e quer dominar a infraestrutura das suas aplicações, e ganhar tempo.
+
+👇 **Dê uma olhada no documento abaixo e me diga: você já usa Docker no seu dia a dia ou ainda sofre configurando ambiente?**
+
+https://github.com/VictorFasty/Estudos-Docker
+
+#Docker #Java #SpringBoot #Backend #DevOps #DesenvolvimentoDeSoftware #Estudos
