@@ -66,30 +66,31 @@ Note que usamos `AS build` na primeira etapa. Isso nos permite compilar o projet
 Dockerfile
 
 ```docker
-# Estágio 1: Build (Compilação)
-# Pegando a imagem do maven para construir o projeto
-FROM maven:3.8.4-jdk-8 AS build
+# 1. Estágio de Build (Cozinha)
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
-# Copia os arquivos do projeto
-COPY src /app/src
-COPY pom.xml /app
-
-# Faz a instalação e o build do .jar
 WORKDIR /app
-RUN mvn clean install
 
-# Estágio 2: Runtime (Execução)
-# Volta e instala apenas o JRE (mais leve) para rodar o app
-FROM openjdk:8-jre-alpine
+# Copia apenas o pom.xml primeiro para baixar as dependências e ganhar tempo no cache
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-# Copiamos apenas o .jar do estágio de build anterior
-COPY --from=build /app/target/spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar /app/app.jar
+# Copia o código fonte e gera o SNAPSHOT (o arquivo .jar)
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# A porta que a aplicação expõe
+# 2. Estágio de Execução (O que vai rodar no servidor)
+FROM eclipse-temurin:21-jre-jammy
+
+WORKDIR /app
+
+# O Maven gera o arquivo com o nome: artifactId-version.jar
+# No seu caso: stock-0.0.1-SNAPSHOT.jar
+COPY --from=build /app/target/stock-0.0.1-SNAPSHOT.jar app.jar
+
 EXPOSE 8080
 
-# Comando para iniciar a aplicação
-CMD ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
 ## 🧩 6.1. O Arquivo docker-compose.yml
