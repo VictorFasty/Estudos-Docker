@@ -271,25 +271,3 @@ Aqui está um resumo rápido para o seu dia a dia:
 1. Login: `docker login`
 2. Tag (se necessário): `docker tag imagem-local usuario/imagem:versao`
 3. Enviar: `docker push usuario/imagem:versao`
-
-**🐳** Docker e como ele acaba com o minha maquina roda.
-
-Sabemos que no desenvolvimento temos que otimizar nosso tempo para cumprir prazos e bater metas, nada melhor que o Docker
-
-Quem nunca passou pela situação de codar o dia todo, tudo rodar perfeito localmente e, na hora de subir para produção, tudo quebrar?
-
-A containerização com Docker resolve esse problema atraves de imagens e containers, atraves de DockerFiles, é um requisito essencial para qualquer desenvolvedor Backend hoje em dia. Pensando nisso, desenvolvi um guia definitivo com base em meu conhecimento — do conceito à orquestração — para desmistificar essa ferramenta, e fazer voce conseguir utilizar com facilidade e entender como o Docker funciona.
-
-📄 **Neste material você vai encontrar:**
-✅ A diferença real entre VM e Container (Kernel).
-✅ Como criar Dockerfiles otimizados (Multi-stage build).
-✅ Networking e Persistência de dados com Volumes.
-✅ O poder do Docker Compose para microsserviços.
-
-Preparei esse conteúdo pensando em quem está desenvolvendo API’s **Java/Spring** (como eu) ou qualquer outra stack e quer dominar a infraestrutura das suas aplicações, e ganhar tempo.
-
-👇 **Dê uma olhada no documento abaixo e me diga: você já usa Docker no seu dia a dia ou ainda sofre configurando ambiente?**
-
-https://github.com/VictorFasty/Estudos-Docker
-
-#Docker #Java #SpringBoot #Backend #DevOps #DesenvolvimentoDeSoftware #Estudos
