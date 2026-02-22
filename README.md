@@ -271,3 +271,5 @@ Aqui está um resumo rápido para o seu dia a dia:
 1. Login: `docker login`
 2. Tag (se necessário): `docker tag imagem-local usuario/imagem:versao`
 3. Enviar: `docker push usuario/imagem:versao`
+
+   
